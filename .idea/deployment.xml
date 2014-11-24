@@ -5,8 +5,11 @@
       <paths name="apacheTomcat">
         <serverdata>
           <mappings>
-            <mapping deploy="\" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="\" local="$PROJECT_DIR$/target/dressshop" web="/" />
           </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/target/dressshop/images" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>

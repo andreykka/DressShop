@@ -14,7 +14,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
-import javax.imageio.IIOImage;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,6 +37,8 @@ public class AddGood extends HttpServlet{
     private static final String G_META_TITLE    = "MTitleG";
     private static final String G_META_DESC     = "MDescG";
     private static final String G_META_KEY      = "MKeyG";
+
+    private static final String GOOD_IMG_PATH   = "/dressshop/images/goods/";
 
     private static final Charset ISO_8859_1     =  Charset.forName("ISO-8859-1");
     private static final Charset UTF_8          =  Charset.forName("UTF-8");
@@ -78,7 +79,7 @@ public class AddGood extends HttpServlet{
         }
         req.setAttribute("categories", categories);
 
-        req.getServletContext().getRequestDispatcher(Admin.ADD_TOVAR_JSP).forward(req, resp);
+        req.getServletContext().getRequestDispatcher(Admin.ADD_GOOD_JSP).forward(req, resp);
     }
 
     @Override
@@ -160,6 +161,7 @@ public class AddGood extends HttpServlet{
 
         } catch (SQLException e) {
             e.printStackTrace();
+            Admin.ERROR_MESSAGE = "Can`t add good";
         }
         resp.sendRedirect(Admin.ADMIN);
 
@@ -180,11 +182,11 @@ public class AddGood extends HttpServlet{
             fileUpload = new File(path);
             dir = new File(fileUpload.getPath());
 
-            gImgUrl     = path;
+            gImgUrl     = GOOD_IMG_PATH + fileName;
 
         }while (fileUpload.exists());
 
-        // створюємо файл та записуємо в нього
+        // створюємо файл та записуємо в ньогоgand
         try {
             if (!dir.exists()) {
                 dir.createNewFile();

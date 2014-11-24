@@ -19,21 +19,25 @@ import java.util.Map;
 public class Admin extends HttpServlet {
 
 
-    public static final String URL                  = "/dressshop";
+    public static final String URL              = "/dressshop";
 
-    public static final String ADMIN                = URL + "/admin";
-    public static final String LOGIN                = URL + "/login";
-    public static final String PNF                  = URL + "/404";
-    public static final String ADD_TOVAR            = URL + ADMIN + "/addTovar";
-    public static final String EDIT_TOVAR           = URL + ADMIN + "/editTovar";
-    public static final String REMOVE_TOVAR         = URL + ADMIN + "/removeTovar";
+    public static       String ERROR_MESSAGE    = "";
 
-    public static final String ADMIN_JSP            = "/WEB-INF/view/admin/admin.jsp";
-    public static final String LOGIN_JSP            = "/WEB-INF/view/login.jsp";
-    public static final String PNF_JSP              = "/WEB-INF/view/404.jsp";
-    public static final String ADD_TOVAR_JSP        = "/WEB-INF/view/admin/goods/addTovar.jsp";
-    public static final String EDIT_TOVAR_JSP       = "/WEB-INF/view/admin/goods/editTovar.jsp";
-    public static final String REMOVE_TOVAR_JSP     = "/WEB-INF/view/admin/goods/removeTovar.jsp";
+    public static final String ADMIN            = URL + "/admin";
+    public static final String LOGIN            = URL + "/login";
+    public static final String PNF              = URL + "/404";
+    public static final String ADD_GOOD         = URL + ADMIN + "/addTovar";
+    public static final String EDIT_GOOD        = URL + ADMIN + "/editTovar";
+    public static final String REMOVE_GOOD      = URL + ADMIN + "/removeTovar";
+
+    public static final String ADMIN_JSP        = "/WEB-INF/view/admin/admin.jsp";
+    public static final String LOGIN_JSP        = "/WEB-INF/view/login.jsp";
+    public static final String PNF_JSP          = "/WEB-INF/view/404.jsp";
+    public static final String ADD_GOOD_JSP     = "/WEB-INF/view/admin/goods/add.jsp";
+    public static final String EDIT_GOOD_JSP    = "/WEB-INF/view/admin/goods/edit.jsp";
+    public static final String REMOVE_GOOD_JSP  = "/WEB-INF/view/admin/goods/remove.jsp";
+    public static final String LIST_GOODS_JSP   = "/WEB-INF/view/admin/goods/list.jsp";
+
 
     private static final Logger LOGGER = Logger.getLogger(Admin.class);
 
@@ -44,13 +48,14 @@ public class Admin extends HttpServlet {
 
         Map<String, String[]> map = req.getParameterMap();
 
+        req.setAttribute("ERROR_MESSAGE", ERROR_MESSAGE);
         if (map != null && map.size() > 0) {
             String action = map.get("action")[0];
 
             if (action != null && !action.isEmpty()) {
-                if (action.equalsIgnoreCase(ADD_TOVAR)  ||
-                    action.equalsIgnoreCase(EDIT_TOVAR) ||
-                    action.equalsIgnoreCase(REMOVE_TOVAR)) {
+                if (action.equalsIgnoreCase(ADD_GOOD)  ||
+                    action.equalsIgnoreCase(EDIT_GOOD) ||
+                    action.equalsIgnoreCase(REMOVE_GOOD)) {
 
                     getServletContext().getRequestDispatcher(action).forward(req, resp);
                     return;

@@ -3,12 +3,13 @@
 
 <c:set var="URL" value="/dressshop"/>
 
+
 <html>
 <head>
     <meta http-equiv="content-type" charset="UTF-8">
     <link type=text/css rel="stylesheet" href="${URL}/css/adminStyle.css">
-    <link href="${URL}/css/bootstrap.min.css" rel="stylesheet">
-    <script src="${URL}/js/bootstrap.min.js"></script>
+    <link href="${URL}/css/bootstrap.css" rel="stylesheet">
+    <script src="${URL}/js/bootstrap.js"></script>
     <title>Админская панель</title>
 </head>
 <body>
@@ -17,7 +18,8 @@
     <c:redirect url="/login">some body</c:redirect>
     </c:if>
 
-<%--    <nav class="navbar navbar-default" role="navigation">
+    <%--
+    <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
 
             <ul class="nav navbar-nav">
@@ -25,8 +27,8 @@
 
                     <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-expanded="false">Товары<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="/admin/AddGood">Добавить новый</a></li>
-                        <li><a href="#">Просмотреть список</a></li>
+                        <li><a href="${URL}/admin/goods/add">Добавить новый</a></li>
+                        <li><a href="${URL}/admin/goods/list">Просмотреть список</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -39,7 +41,7 @@
             </ul>
 
             <ul class="nav navbar-right">
-                <li><a href="logout"><span class="glyphicon glyphicon glyphicon-log-out glyphicon-th-large"></span></a></li>
+                <li><a href="${URL}/logout"><span class="glyphicon glyphicon glyphicon-log-out" style="vertical-align: middle;"></span></a></li>
             </ul>
 
             <ul class="nav navbar-right">
@@ -52,10 +54,10 @@
     <div class="header_main">
 
         <ul id="nav">
-            <li><a href="#">Товары</a>
+            <li><a href="${URL}/admin/goods/list">Товары</a>
                 <ul>
                     <li><a href="${URL}/admin/goods/add">Добавить новый</a></li>
-                    <li><a href="#">Просмотреть все</a></li>
+                    <li><a href="${URL}/admin/goods/list">Просмотреть все</a></li>
                 </ul>
             </li>
             <li><a href="#">Категории</a>
@@ -74,9 +76,19 @@
         </ul>
 
         <div class="welcomeAdmin">
-            <label>Добро пожаловать: <c:out value="${sessionScope.get(\"admin\")}"> </c:out></label>
-            <%--<span class="glyphicon glyphicon glyphicon-log-out"></span>--%>
-            <a href="logout"><img src="${URL}/images/logout.bmp" width="32" height="32" alt="Выход"></a>
+            <label>Добро пожаловать: <c:out value="${sessionScope.get(\"admin\")}">
+            </c:out></label>
+            <a href="${URL}/logout"><span style="font-size: x-large;" class="glyphicon glyphicon glyphicon-log-out"></span></a>
+            <%--<a href="logout"><img src="${URL}/images/logout.bmp" width="32" height="32" alt="Выход"></a>--%>
         </div>
 
     </div>
+
+    <c:if test="${ERROR_MESSAGE.length() > 0}">
+        <hr>
+        <div style="height: 50px; width: 100%; text-align: center;">
+            <h2 style="color: #c9302c;">${ERROR_MESSAGE}</h2>
+            ${ERROR_MESSAGE = ""}
+        </div>
+        <hr>
+    </c:if>

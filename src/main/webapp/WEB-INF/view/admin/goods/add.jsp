@@ -81,7 +81,7 @@
 
         <div class="form-group">
             <label for="inpFile">Выберите файл</label>
-            <input type="file" id="inpFile" name="inputFile">
+            <input type="file" accept="image/*" id="inpFile" name="inputFile">
             <p class="help-block">Выберите изображение в формате (.jpg .jpeg .png .gif )</p>
         </div>
 

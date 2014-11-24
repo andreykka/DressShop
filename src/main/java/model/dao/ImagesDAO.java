@@ -1,5 +1,6 @@
 package model.dao;
 
+import model.entity.Goods;
 import model.entity.Images;
 
 import java.sql.SQLException;
@@ -11,6 +12,8 @@ import java.util.List;
 public interface ImagesDAO {
 
     public int          add(Images image)           throws SQLException;
+
+    public List<Images> getByIdGood(int id)         throws SQLException;
 
     public List<Images> get()                       throws SQLException;
 

@@ -12,6 +12,13 @@
     width: 75%;
 }
 
+.rowHower tr:hover{
+
+
+
+    background-color: rgba(120, 255, 130, 0.25);
+}
+
 .header_main{
     width: 90%;
     margin: 0 auto;
@@ -20,7 +27,7 @@
 
 #addTovarForm {
     /*width: 80%;*/
-    margin: 0, auto;
+    margin: 0 auto;
 }
 
 /*------------------------------------*\
@@ -28,11 +35,10 @@
 \*------------------------------------*/
 #nav{
     float:left;
-    margin: 0, auto, 10px, auto;
+    margin: 0 auto 10px auto;
     /*width:80%;*/
     list-style:none;
     font-weight:bold;
-    /*margin-bottom:10px;*/
 }
 #nav li{
     vertical-align: middle;

@@ -1,10 +1,14 @@
 package model.entity;
 
-
+import model.dao.ImagesDAO;
+import model.dao.impl.ImagesDaoImpl;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gandy on 27.10.14.
@@ -52,6 +56,19 @@ public class Goods implements Serializable {
 
 
     public Goods() {
+    }
+
+    public List<Images> getImages(){
+
+        List<Images> list = null;
+        ImagesDAO imagesDAO = new ImagesDaoImpl();
+        try {
+            list = imagesDAO.getByIdGood(this.id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+
     }
 
     public int getId() {
