@@ -1,0 +1,82 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:set var="URL" value="/dressshop"/>
+
+<html>
+<head>
+    <meta http-equiv="content-type" charset="UTF-8">
+    <link type=text/css rel="stylesheet" href="${URL}/css/adminStyle.css">
+    <link href="${URL}/css/bootstrap.min.css" rel="stylesheet">
+    <script src="${URL}/js/bootstrap.min.js"></script>
+    <title>Админская панель</title>
+</head>
+<body>
+
+    <c:if test="${sessionScope.get(\"admin\") == null}">
+    <c:redirect url="/login">some body</c:redirect>
+    </c:if>
+
+<%--    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+
+                    <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-expanded="false">Товары<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li><a href="/admin/AddGood">Добавить новый</a></li>
+                        <li><a href="#">Просмотреть список</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Категории<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Добавить категорию</a></li>
+                        <li><a href="#">Просмотреть список</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-right">
+                <li><a href="logout"><span class="glyphicon glyphicon glyphicon-log-out glyphicon-th-large"></span></a></li>
+            </ul>
+
+            <ul class="nav navbar-right">
+                <p class="navbar-text">Welcome <c:out value="${sessionScope.get(\"admin\")}"> </c:out> </p>
+            </ul>
+
+        </div>
+    </nav>--%>
+
+    <div class="header_main">
+
+        <ul id="nav">
+            <li><a href="#">Товары</a>
+                <ul>
+                    <li><a href="${URL}/admin/goods/add">Добавить новый</a></li>
+                    <li><a href="#">Просмотреть все</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Категории</a>
+                <ul>
+                    <li><a href="#">Добавить категорию</a></li>
+                    <li><a href="#">Просмотреть все</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Пользователи</a>
+                <ul>
+                    <li><a href="#">Добавить пользователя</a></li>
+                    <li><a href="#">Просмотреть всех</a></li>
+                </ul>
+            </li>
+
+        </ul>
+
+        <div class="welcomeAdmin">
+            <label>Добро пожаловать: <c:out value="${sessionScope.get(\"admin\")}"> </c:out></label>
+            <%--<span class="glyphicon glyphicon glyphicon-log-out"></span>--%>
+            <a href="logout"><img src="${URL}/images/logout.bmp" width="32" height="32" alt="Выход"></a>
+        </div>
+
+    </div>
