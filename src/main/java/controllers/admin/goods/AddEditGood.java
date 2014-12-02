@@ -4,6 +4,7 @@ import controllers.admin.Admin;
 import model.dao.CategoryDAO;
 import model.dao.GoodsDao;
 import model.dao.ImagesDAO;
+import model.dao.impl.GoodsDaoImpl;
 import model.entity.Categories;
 import model.entity.Goods;
 import model.entity.Images;
@@ -26,8 +27,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 
-@WebServlet(name = "AddGood", urlPatterns = "/admin/goods/add")
-public class AddGood extends HttpServlet{
+@WebServlet(name = "AddEditGood", urlPatterns = {   "/admin/goods/add", "/admin/goods/add/",
+                                                    "/admin/goods/edit", "/admin/goods/edit/"})
+public class AddEditGood extends HttpServlet{
 
     private static final String G_NAME          = "nameG";
     private static final String G_DESC          = "descG";
@@ -38,7 +40,7 @@ public class AddGood extends HttpServlet{
     private static final String G_META_DESC     = "MDescG";
     private static final String G_META_KEY      = "MKeyG";
 
-    private static final String GOOD_IMG_PATH   = "/dressshop/images/goods/";
+    private static final String GOOD_IMG_PATH   = "/images/goods/";
 
     private static final Charset ISO_8859_1     =  Charset.forName("ISO-8859-1");
     private static final Charset UTF_8          =  Charset.forName("UTF-8");
@@ -53,14 +55,15 @@ public class AddGood extends HttpServlet{
     private String  gMKey;
     private String  gImgUrl;
 
-    private static ArrayList<Map>   categories = new ArrayList<Map>();
+    private static final String ACTION_ADD  = "add".toLowerCase();
+    private static final String ACTION_EDIT = "edit".toLowerCase();
 
-    private static final Logger LOGGER = Logger.getLogger(AddGood.class);
+    private static final Logger LOGGER = Logger.getLogger(AddEditGood.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        System.out.println("In AddGood DOGET()");
+        System.out.println("In AddEditGood DOGET()");
         CategoryDAO categoryDAO = FactoryDaoHibernate.getInstance().getCategoryDAO();
         List<Categories> cats = null;
         try {
@@ -68,26 +71,46 @@ public class AddGood extends HttpServlet{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        req.setAttribute("categories", cats);
 
-        categories.clear();
-        for (Categories cat: cats) {
-            Map map = new HashMap();
-            map.put("id", cat.getId());
-            map.put("name",cat.getName());
-            categories.add(map);
-            System.out.println("id=" + cat.getId() + "  name=" + cat.getName());
+        // slit the URL on sections
+        String[] strings = req.getRequestURI().toLowerCase().split("/");
+
+        String action = strings[strings.length-1].toLowerCase();
+
+        String page = "";
+        if (action.equals(ACTION_ADD)) {
+            page = Admin.ADD_GOOD_JSP;
+        } else if (action.equals(ACTION_EDIT)) {
+            page = Admin.EDIT_GOOD_JSP;
+            String id = req.getParameter("id");
+            int idGood = 0;
+            if (id != null) {
+                try { idGood = Integer.parseInt(id); } catch (Exception e) {
+                    e.printStackTrace();
+                    resp.sendRedirect(Admin.LIST_GOOD);
+                }
+            }
+            GoodsDao goodsDao = new GoodsDaoImpl();
+            try {
+                Goods good  = goodsDao.getById(idGood);
+                req.setAttribute("good", good);
+            } catch (SQLException e) {
+                Admin.ERROR_MESSAGE = "CAN`T READ FROM Goods. Please check connection with DB";
+                e.printStackTrace();
+            }
+        } else {
+            resp.sendRedirect(Admin.LIST_GOOD);
         }
-        req.setAttribute("categories", categories);
 
-        req.getServletContext().getRequestDispatcher(Admin.ADD_GOOD_JSP).forward(req, resp);
+        System.out.println("page before redirect:" + page);
+
+        req.getServletContext().getRequestDispatcher(page).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        System.out.println("BEFORE encoding =" + req.getCharacterEncoding());
-        req.setCharacterEncoding("UTF-8");
-        System.out.println("encoding =" + req.getCharacterEncoding());
         // check is multipart content datea
         boolean isMultipart = ServletFileUpload.isMultipartContent(req);
         if (!isMultipart) {
@@ -102,11 +125,9 @@ public class AddGood extends HttpServlet{
         factory.setSizeThreshold(1024*1024);
 
         File tempDir  = (File) getServletContext().getAttribute("javax.servlet.context.tempdir");
-
-        System.out.println("PATH= " + tempDir.getAbsoluteFile());
-
         factory.setRepository(tempDir);
 
+//        System.out.println("PATH= " + tempDir.getAbsoluteFile());
         //Создаём сам загрузчик
         ServletFileUpload upload = new ServletFileUpload(factory);
 
@@ -135,9 +156,8 @@ public class AddGood extends HttpServlet{
         CategoryDAO categoryDAO = FactoryDaoHibernate.getInstance().getCategoryDAO();
         Goods       good        = new Goods();
         Images      images      = new Images();
-        Categories  category   = new Categories();
+        Categories  category    = new Categories();
 
-        System.out.println("idCat= " + gIdCat);
 
         good.setName(this.gName);
         good.setDescription(this.gDesc);
@@ -152,19 +172,65 @@ public class AddGood extends HttpServlet{
         good.setMetaKeywords(this.gMKey);
 
 
-        try {
-            goodsDao.add(good);
+        // slit the URL on sections
+        String[] strings = req.getRequestURI().toLowerCase().split("/");
 
-            images.setGood(good);
-            images.setUrl(gImgUrl);
-            imagesDAO.add(images);
+        String action = strings[strings.length-1].toLowerCase();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Admin.ERROR_MESSAGE = "Can`t add good";
+        String page = "";
+        if (action.equals(ACTION_ADD)) {
+            try {
+                goodsDao.add(good);
+                images.setGood(good);
+                images.setUrl(gImgUrl);
+                imagesDAO.add(images);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Admin.ERROR_MESSAGE = "Can`t add good";
+            }
+        } else if (action.equals(ACTION_EDIT)) {
+            String id = req.getParameter("id");
+            int idGood = 0;
+            if (id != null) {
+                try { idGood = Integer.parseInt(id); } catch (Exception e) {
+                    e.printStackTrace();
+                    Admin.ERROR_MESSAGE = "id is not a Integer";
+                    resp.sendRedirect(Admin.LIST_GOOD);
+                }
+            }
+            try{
+                Goods isEditGood = goodsDao.getById(idGood);
+                if (isEditGood == null){
+                    Admin.ERROR_MESSAGE = "Good with id '" + idGood +"' not contains in database";
+                    resp.sendRedirect(Admin.LIST_GOOD);
+                }
+                good.setId(idGood);
+                goodsDao.update(good);
+
+                List<Images> isSetImages = imagesDAO.getByIdGood(good.getId());
+                if (isSetImages != null && isSetImages.size() > 0){
+                    for (Images img: isSetImages){
+                        File file = new File(getServletContext().getRealPath(img.getUrl()));
+                        if (file.exists()){
+                            file.setWritable(true);
+                            file.delete();
+                        }
+                        img.setUrl(gImgUrl);
+                        imagesDAO.update(img);
+                    }
+                } else {
+                    Images newImage = new Images();
+                    newImage.setGood(good);
+                    newImage.setUrl(gImgUrl);
+                    imagesDAO.add(newImage) ;
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Admin.ERROR_MESSAGE = "Can`t add good";
+            }
         }
-        resp.sendRedirect(Admin.ADMIN);
-
+        resp.sendRedirect(Admin.LIST_GOOD);
     }
 
     private void processUploadFile(FileItem item) {
@@ -176,7 +242,8 @@ public class AddGood extends HttpServlet{
         //выбираем файлу имя пока не найдём свободное
         do {
             fileName = rand.nextInt() + item.getName();
-            String path = getServletContext().getRealPath("/images/goods/" + fileName );
+
+            String path = getServletContext().getRealPath("/images/goods/" + fileName);
             System.out.println("PATH = "  + path);
             LOGGER.info("PATH = "  + path);
             fileUpload = new File(path);
@@ -186,7 +253,7 @@ public class AddGood extends HttpServlet{
 
         }while (fileUpload.exists());
 
-        // створюємо файл та записуємо в ньогоgand
+        // створюємо файл та записуємо в нього
         try {
             if (!dir.exists()) {
                 dir.createNewFile();
@@ -197,13 +264,10 @@ public class AddGood extends HttpServlet{
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void proccessField(FileItem item) {
-
         String castedToCharsetField = new String(item.getString().getBytes(ISO_8859_1), UTF_8);
-
         switch (item.getFieldName()) {
             case G_NAME:        { gName     = castedToCharsetField; break;}
             case G_DESC:        { gDesc     = castedToCharsetField; break;}

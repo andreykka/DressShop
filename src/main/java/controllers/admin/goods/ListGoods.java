@@ -19,7 +19,7 @@ import java.util.List;
  *
  */
 
-@WebServlet(name = "ListGoods", urlPatterns = "/admin/goods/list")
+@WebServlet(name = "ListGoods", urlPatterns = {"/admin/goods", "/admin/goods/" })
 public class ListGoods extends HttpServlet {
 
     @Override

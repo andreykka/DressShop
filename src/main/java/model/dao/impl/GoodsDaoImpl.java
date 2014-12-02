@@ -62,7 +62,7 @@ public class GoodsDaoImpl implements GoodsDao {
 
         try {
             session =  HibernateUtil.getSessionFactory().openSession();
-            good = (Goods) session.load(Goods.class, id);
+            good = (Goods) session.get(Goods.class, id);
         } catch (Exception e) {
            LOGGER.error(e);
         }

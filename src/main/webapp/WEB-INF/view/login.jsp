@@ -10,7 +10,7 @@
 </head>
 <body>
 
-    <form class="loginForm" method="POST" >
+    <form class="loginForm" method="POST">
         <label>Авторизация</label>
         <div class="field">
             <label>Имя пользователя</label>

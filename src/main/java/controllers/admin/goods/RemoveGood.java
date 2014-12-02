@@ -1,7 +1,5 @@
 package controllers.admin.goods;
 
-import config.Config;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +9,7 @@ import java.io.IOException;
 
 /**
  * Created by gandy on 23.11.14.
+ *
  */
 @WebServlet(name = "removeServlet", urlPatterns = "/admin/goods/remove")
 public class RemoveGood extends HttpServlet {

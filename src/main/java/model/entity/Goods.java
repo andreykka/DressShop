@@ -55,11 +55,9 @@ public class Goods implements Serializable {
     private String metaKeywords;
 
 
-    public Goods() {
-    }
+    public Goods() { }
 
     public List<Images> getImages(){
-
         List<Images> list = null;
         ImagesDAO imagesDAO = new ImagesDaoImpl();
         try {
@@ -68,7 +66,6 @@ public class Goods implements Serializable {
             e.printStackTrace();
         }
         return list;
-
     }
 
     public int getId() {

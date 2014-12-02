@@ -21,15 +21,5 @@
         <error-code>404</error-code>
         <location>/WEB-INF/view/404.jsp</location>
     </error-page>
-<!--
-    <filter>
-        <filter-name>EncodingFilter</filter-name>
-        <filter-class>filters.EncodingFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>EncodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>-->
-
 
 </web-app>

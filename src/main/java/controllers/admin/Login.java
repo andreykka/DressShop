@@ -16,25 +16,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(description = "login page contoller", urlPatterns = "/login", name = "Login")
+@WebServlet(description = "login page contoller", urlPatterns = {"/admin/login", "/admin/login/"}, name = "Login")
 public class Login extends HttpServlet {
 
     private static final long serialVersionUID = 4142359428080050655L;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("in Login doGet");
-
         getServletContext().getRequestDispatcher(Admin.LOGIN_JSP).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        System.out.println("in doPost");
-
-        //Map<String, String[]> arr = req.getParameterMap();
-
         String login = req.getParameter("login");
         String password = Config.getPasswordHash(req.getParameter("password"));
 
@@ -51,21 +44,21 @@ public class Login extends HttpServlet {
         if (isAdmin){
             req.getSession().setAttribute("admin", login);
             req.setAttribute("isAdmin", true);
-            script = "setTimeout('location.replace(\"http://" + Config.URL + "/dressshop/admin" + "\")',500)";
+            resp.sendRedirect(Admin.LIST_GOOD);
+//            getServletContext().getRequestDispatcher(Admin.LIST_GOODS_JSP).forward(req, resp);
         } else {
             script = "setTimeout('location.replace(\"http://" + Config.URL + "/dressshop/login" + "\")',500)";
+
+            PrintWriter writer = resp.getWriter();
+            writer.write("<html> <head> <script  type=\"application/javascript\" >" + script +
+                    " </script></head><body>");
+            writer.write("</br><div style=\"text-align: center;\">user: " + login + "</div>");
+            writer.write("</br><div style=\"text-align: center\">pass: " + password+"</div>");
+
+            writer.write("<h1 style=\"text-align: center;\">User with this login and password is not admin!!!</h1>");
+            writer.write("</body> </html>");
         }
 
-        PrintWriter writer = resp.getWriter();
-        writer.write("<html> <head> <script  type=\"application/javascript\" >" + script +
-                " </script></head><body>");
-        String reg = isAdmin ? " welcome to admin pane " : " is not admin ";
-        writer.write("</br><div style=\"text-align: center;\">user: " + login + "</div>");
-        writer.write("</br><div style=\"text-align: center\">pass: " + password+"</div>");
-
-        writer.write("<h1 style=\"text-align: center;\">" + reg + "</h1>");
-
-        writer.write("</body> </html>");
 
     }
 

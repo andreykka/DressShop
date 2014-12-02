@@ -20,13 +20,12 @@
                 <textarea class="form-control" rows="3" name="descG" id="inpDesc" required="required" placeholder="Введите описание товара"></textarea>
                 <div class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span> </div>
             </div>
-            <%--<input type="text" name="descG" class="form-control" id="inpDesc"  required="required" placeholder="Введите наименование товара">--%>
         </div>
 
         <div class="form-group">
             <label for="inpCat" class="control-label">Категория</label>
             <%--<div class="input-group">--%>
-                <select class="form-control" id="inpCat" name="categoryG">
+                <select class="form-control form-select-button" id="inpCat" name="categoryG">
                 <c:forEach var="category" items="${categories}">
                     <option value="${category.id}">
                         ${category.name}
