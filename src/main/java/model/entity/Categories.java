@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 /**
  * Created by gandy on 18.11.14.
+ *
  */
 
 @Entity

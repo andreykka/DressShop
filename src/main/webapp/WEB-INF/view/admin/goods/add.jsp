@@ -1,4 +1,3 @@
-
     <div class="admin-content">
     <h2 style="text-align: center">Добавление нового товара</h2>
 

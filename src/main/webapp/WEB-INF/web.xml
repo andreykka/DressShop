@@ -8,6 +8,7 @@
     <jsp-config>
         <jsp-property-group>
             <url-pattern>/admin/goods/*</url-pattern>
+            <url-pattern>/admin/category/*</url-pattern>
             <url-pattern>/admin/*</url-pattern>
             <url-pattern>/WEB-INF/view/admin/*</url-pattern>
             <url-pattern>/WEB-INF/view/admin/</url-pattern>

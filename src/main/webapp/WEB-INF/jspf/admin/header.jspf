@@ -11,7 +11,19 @@
     <link href="${URL}/css/bootstrap.min.css" rel="stylesheet">
     <script src="${URL}/js/jquery.js"></script>
     <script src="${URL}/js/bootstrap.min.js"></script>
-    <title>Админская панель</title>
+    <title>Админtская панель</title>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // function hide message
+            function hideMessage() {
+                var className = '.message';
+                // get elements that has class="message"
+                $(className).fadeOut(1000);
+            }
+            // start hide function after 1000ms
+            setTimeout(hideMessage, 3000);
+        });
+    </script>
 </head>
 <body>
 
@@ -25,17 +37,17 @@
                 <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="${URL_ADMIN}/goods/add" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-expanded="false">Товары<span class="caret"></span></a>
+                            <a href="${URL_ADMIN}/goods" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" role="button" aria-expanded="false">Товары<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                                 <li><a href="${URL_ADMIN}/goods/add">Добавить новый</a></li>
                                 <li><a href="${URL_ADMIN}/goods">Просмотреть список</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Категории<span class="caret"></span></a>
+                            <a href="${URL_ADMIN}/category" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Категории<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Добавить категорию</a></li>
-                                <li><a href="#">Просмотреть список</a></li>
+                                <li><a href="${URL_ADMIN}/category/add">Добавить категорию</a></li>
+                                <li><a href="${URL_ADMIN}/category">Просмотреть список</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -52,10 +64,22 @@
         </nav>
 
     <c:if test="${ERROR_MESSAGE.length() > 0}">
-        <hr>
-        <div style="height: 50px; width: 100%; text-align: center;">
-            <h2 style="color: #c9302c;">${ERROR_MESSAGE}</h2>
+        <div class="message">
+            <hr>
+            <div id="err" style="height: 50px; width: 100%; text-align: center;">
+                <h2 style="color: #c9302c;">${ERROR_MESSAGE}</h2>
             ${ERROR_MESSAGE = ""}
+            </div>
+            <hr>
         </div>
-        <hr>
+    </c:if>
+    <c:if test="${INFO_MESSAGE.length() > 0}">
+        <div class="message">
+            <hr>
+            <div style="height: 50px; width: 100%; text-align: center;">
+                <h2 style="color: #2dc92b;">${INFO_MESSAGE}</h2>
+                ${INFO_MESSAGE = ""}
+            </div>
+            <hr>
+        </div>
     </c:if>

@@ -71,7 +71,7 @@ public class AddEditGood extends HttpServlet{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        req.setAttribute("categories", cats);
+        req.setAttribute("category", cats);
 
         // slit the URL on sections
         String[] strings = req.getRequestURI().toLowerCase().split("/");
@@ -79,6 +79,7 @@ public class AddEditGood extends HttpServlet{
         String action = strings[strings.length-1].toLowerCase();
 
         String page = "";
+
         if (action.equals(ACTION_ADD)) {
             page = Admin.ADD_GOOD_JSP;
         } else if (action.equals(ACTION_EDIT)) {
@@ -102,8 +103,6 @@ public class AddEditGood extends HttpServlet{
         } else {
             resp.sendRedirect(Admin.LIST_GOOD);
         }
-
-        System.out.println("page before redirect:" + page);
 
         req.getServletContext().getRequestDispatcher(page).forward(req, resp);
     }
@@ -177,7 +176,6 @@ public class AddEditGood extends HttpServlet{
 
         String action = strings[strings.length-1].toLowerCase();
 
-        String page = "";
         if (action.equals(ACTION_ADD)) {
             try {
                 goodsDao.add(good);

@@ -20,6 +20,5 @@ public class Logout extends HttpServlet{
             req.getSession().removeAttribute("admin");
         }
         resp.sendRedirect(Admin.ADMIN);
-
     }
 }
